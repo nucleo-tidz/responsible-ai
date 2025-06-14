@@ -22,8 +22,6 @@ namespace api.Controllers
             var response = await contentFilterService.GetBlockedText(blockListName);
             return Ok(response);
         }
-
-
         [HttpGet("analyse/{text}")]
         public async Task<IActionResult> Analyse(string text)
         {

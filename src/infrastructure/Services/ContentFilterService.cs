@@ -17,7 +17,7 @@ namespace infrastructure.Services
             return (response.Status, response.ReasonPhrase);
         }
         public async Task<IReadOnlyList<TextBlocklistItem>> AddBlockText(IEnumerable<string> blackList, string blockListName, string blockListDescription)
-        {
+        {            .
             await this.UpsertBlockList(blockListName, blockListDescription);
             TextBlocklistItem[] blockItems = blackList.Select(_ => new TextBlocklistItem(_)).ToArray();
             var response = await blocklistClient.AddOrUpdateBlocklistItemsAsync(blockListName, new AddOrUpdateTextBlocklistItemsOptions(blockItems));
