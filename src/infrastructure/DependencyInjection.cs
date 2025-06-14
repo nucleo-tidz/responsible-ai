@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Azure.AI.ContentSafety;
+using infrastructure.Services;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +15,9 @@ namespace infrastructure
             services.AddAzureClients(x =>
             {
                 x.AddContentSafetyClient(new Uri(configuration["ContentSafety:URI"]), new AzureKeyCredential(configuration["ContentSafety:Key"]));
+                x.AddBlocklistClient(new Uri(configuration["ContentSafety:URI"]), new AzureKeyCredential(configuration["ContentSafety:Key"]));
             });
+            services.AddTransient<IContentFilterService, ContentFilterService>();
             return services;
         }
 
