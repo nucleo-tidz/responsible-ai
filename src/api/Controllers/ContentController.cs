@@ -25,7 +25,7 @@ namespace api.Controllers
         [HttpGet("analyse/{text}")]
         public async Task<IActionResult> Analyse(string text)
         {
-            var response = await contentFilterService.Analyse(text);
+            var response = await contentFilterService.Analyze(text);
             return Ok(response);
         }
     }

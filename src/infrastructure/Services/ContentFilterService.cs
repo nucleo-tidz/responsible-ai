@@ -33,7 +33,7 @@ namespace infrastructure.Services
             }
             return await Task.FromResult(blockedText);
         }
-        public async Task<IEnumerable<string>> Analyse(string text)
+        public async Task<IEnumerable<string>> Analyze(string text)
         {
             var request = new AnalyzeTextOptions(text);
             var blockLists = this.GetBlockList();

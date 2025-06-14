@@ -6,6 +6,6 @@ namespace infrastructure.Services
     {
         Task<IReadOnlyList<TextBlocklistItem>> AddBlockText(IEnumerable<string> blackList, string blockListName, string blockListDescription);
         Task<IEnumerable<string>> GetBlockedText(string blockListName);
-        Task<IEnumerable<string>> Analyse(string text);
+        Task<IEnumerable<string>> Analyze(string text);
     }
 }
