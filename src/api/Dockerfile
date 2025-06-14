@@ -11,8 +11,6 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/api/api.csproj", "src/api/"]
 COPY ["infrastructure/infrastructure.csproj", "infrastructure/"]
-COPY ["model/model.csproj", "model/"]
-COPY ["service/service.csproj", "service/"]
 RUN dotnet restore "./src/api/./api.csproj"
 COPY . .
 WORKDIR "/src/src/api"
