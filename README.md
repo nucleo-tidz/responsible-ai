@@ -25,7 +25,7 @@ When a user prompt is sent to the LLM (like GPT-4), the app:
 ---
 ## 🛠️ Setting Up a Custom Category in Azure Content Safety
 
-To enforce organization-specific safety filters (e.g., internal policy terms or sensitive project names), you can create and train a **Custom Category** in Azure Content Safety.
+To enforce organization-specific safety filters (e.g., personal-data or sensitive project names), you can create and train a **Custom Category** in Azure Content Safety.
 
 Follow these steps:
 
@@ -40,9 +40,9 @@ Follow these steps:
 
 4. **Add New Category Details**  
    - Click **Add new category**
-   - Provide a **Name** (e.g., `internal-policy`)
+   - Provide a **Name** (e.g., `personal-data`)
    - Add a **Description**
-   - Enter a **public ** pointing to your **`.jsonl` training file** stored in Azure Blob Storage  
+   - Enter a **public URL** pointing to your **`.jsonl` training file** stored in Azure Blob Storage , [Sample data](https://github.com/nucleo-tidz/responsible-ai/tree/main/trainingdata)
      > grant Data Reader and Contributor roles for both Azure AI Foundry and Azure Content Safety services
 5. **Click `Create and Train`**  
    Azure will begin training your category. This may take a few minutes.
