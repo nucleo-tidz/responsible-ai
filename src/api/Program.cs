@@ -7,7 +7,9 @@ builder.Configuration
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCustomCategorySafety(builder.Configuration);
 builder.Services.AddContentSafety(builder.Configuration);
+builder.Services.AddCustomCategorySafety(builder.Configuration);
 var app = builder.Build();
 
 

@@ -25,7 +25,11 @@ namespace api.Controllers
         [HttpGet("analyse/{text}")]
         public async Task<IActionResult> Analyse(string text)
         {
-            var response = await contentFilterService.Analyze(text);
+            var response = await contentFilterService.Analyze(text, "personal-data");
+            if (response is not null && response.Any(_=>_!=""))
+            {
+                response = response.Select(item => $"{item} content detected. Operation is denied.");
+            }
             return Ok(response);
         }
     }
