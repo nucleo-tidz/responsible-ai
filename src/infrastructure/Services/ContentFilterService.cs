@@ -5,7 +5,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace infrastructure.Services
 {
-    public class ContentFilterService(ContentSafetyClient contentSafetyClient, BlocklistClient blocklistClient) : IContentFilterService
+    public class ContentFilterService(ContentSafetyClient contentSafetyClient, BlocklistClient blocklistClient, ICustomContentFilterService contentFilterService) : IContentFilterService
     {
         private async Task<(int, string)> UpsertBlockList(string name, string description)
         {
@@ -33,7 +33,7 @@ namespace infrastructure.Services
             }
             return await Task.FromResult(blockedText);
         }
-        public async Task<IEnumerable<string>> Analyze(string text)
+        public async Task<IEnumerable<string>> Analyze(string text,string customeCategory=null)
         {
             var request = new AnalyzeTextOptions(text);
             var blockLists = this.GetBlockList();
@@ -49,6 +49,10 @@ namespace infrastructure.Services
                 {
                     return new string[] { analysis.Category.ToString() };
                 }
+            }
+            if(!string.IsNullOrEmpty(customeCategory))
+            {
+                await contentFilterService.AnalyzeCustomCategoryAsync(text, customeCategory);
             }
             if (analysisResult.Value.BlocklistsMatch != null)
             {

@@ -8,10 +8,10 @@ namespace infrastructure.Filters
         public async Task OnPromptRenderAsync(PromptRenderContext context, Func<PromptRenderContext, Task> next)
         {
             await next(context);
-            IEnumerable<string> categories = await contentFilterService.Analyze(context.RenderedPrompt);
+            IEnumerable<string> categories = await contentFilterService.Analyze(context.RenderedPrompt, "personal-data");
             if (categories.Any())
             {
-                throw new Exception($"{string.Join(",", categories)} content detected. Operation is denied.");
+                throw new KernelException($"{string.Join(",", categories)} content detected. Operation is denied.");
             }
         }
     }

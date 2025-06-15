@@ -28,12 +28,9 @@ namespace infrastructure
             {
                 IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
                 kernelBuilder.Services.AddSingleton<IPromptRenderFilter, InputFilter>();
-                kernelBuilder.Services.AddAzureClients(x =>
-                {
-                    x.AddContentSafetyClient(new Uri(configuration["ContentSafety:URI"]), new AzureKeyCredential(configuration["ContentSafety:Key"]));
-                    x.AddBlocklistClient(new Uri(configuration["ContentSafety:URI"]), new AzureKeyCredential(configuration["ContentSafety:Key"]));
-                });
-                kernelBuilder.Services.AddTransient<IContentFilterService, ContentFilterService>();
+                kernelBuilder.Services.AddCustomCategorySafety(configuration);
+                kernelBuilder.Services.AddContentSafety(configuration);
+  
                 kernelBuilder.Services.AddAzureOpenAIChatCompletion("o4-mini",
                       configuration["o4-mini-url"],
                       configuration["o4-mini"],
@@ -41,6 +38,17 @@ namespace infrastructure
                        "o4-mini");
                 return kernelBuilder.Build();
             });
+        }
+        public static IServiceCollection AddCustomCategorySafety(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddTransient<ICustomContentFilterService, CustomContentFilterService>();
+
+            services.AddHttpClient<ICustomContentFilterService, CustomContentFilterService>(client =>
+            {
+                client.BaseAddress = new Uri(configuration["ContentSafety:URI"]);
+            });
+            return services;
+
         }
     }
 }

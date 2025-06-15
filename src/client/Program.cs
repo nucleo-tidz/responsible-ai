@@ -16,7 +16,6 @@ IHost host = Host.CreateDefaultBuilder(args)
     })
     .ConfigureServices((config, services) =>
     {
-        services.AddContentSafety(config.Configuration);
         services.AddSemanticKernel(config.Configuration);
 #pragma warning disable SKEXP0110 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         services.AddTransient<IBootStrapper, BootStrapper>();
