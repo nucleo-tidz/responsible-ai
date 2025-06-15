@@ -42,7 +42,7 @@ Follow these steps:
    - Click **Add new category**
    - Provide a **Name** (e.g., `internal-policy`)
    - Add a **Description**
-   - Enter a **public ** pointing to your **`.jsonl` training file** stored in Azure Blob Storage  
+   - Enter a **public URL** pointing to your **`.jsonl` training file** stored in Azure Blob Storage , [Sample data](https://github.com/nucleo-tidz/responsible-ai/tree/main/trainingdata)
      > grant Data Reader and Contributor roles for both Azure AI Foundry and Azure Content Safety services
 5. **Click `Create and Train`**  
    Azure will begin training your category. This may take a few minutes.
