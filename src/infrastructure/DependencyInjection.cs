@@ -1,9 +1,11 @@
 ﻿using Azure;
 using Azure.AI.ContentSafety;
+using infrastructure.Filters;
 using infrastructure.Services;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.SemanticKernel;
 using System.Net;
 
 namespace infrastructure
@@ -20,6 +22,25 @@ namespace infrastructure
             services.AddTransient<IContentFilterService, ContentFilterService>();
             return services;
         }
-
+        public static IServiceCollection AddSemanticKernel(this IServiceCollection services, IConfiguration configuration)
+        {
+            return services.AddTransient<Kernel>(_ =>
+            {
+                IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
+                kernelBuilder.Services.AddSingleton<IPromptRenderFilter, InputFilter>();
+                kernelBuilder.Services.AddAzureClients(x =>
+                {
+                    x.AddContentSafetyClient(new Uri(configuration["ContentSafety:URI"]), new AzureKeyCredential(configuration["ContentSafety:Key"]));
+                    x.AddBlocklistClient(new Uri(configuration["ContentSafety:URI"]), new AzureKeyCredential(configuration["ContentSafety:Key"]));
+                });
+                kernelBuilder.Services.AddTransient<IContentFilterService, ContentFilterService>();
+                kernelBuilder.Services.AddAzureOpenAIChatCompletion("o4-mini",
+                      configuration["o4-mini-url"],
+                      configuration["o4-mini"],
+                       "o4-mini",
+                       "o4-mini");
+                return kernelBuilder.Build();
+            });
+        }
     }
 }
