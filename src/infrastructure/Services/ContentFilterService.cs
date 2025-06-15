@@ -52,7 +52,7 @@ namespace infrastructure.Services
             }
             if(!string.IsNullOrEmpty(customeCategory))
             {
-                await contentFilterService.AnalyzeCustomCategoryAsync(text, customeCategory);
+                return new string[] { await contentFilterService.AnalyzeCustomCategoryAsync(text, customeCategory) }; 
             }
             if (analysisResult.Value.BlocklistsMatch != null)
             {

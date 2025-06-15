@@ -7,6 +7,8 @@
 
     public class CustomContentFilterService: ICustomContentFilterService
     {
+        public record CustomCategoryAnalysisResponse(CustomCategoryAnalysis customCategoryAnalysis);
+        public record CustomCategoryAnalysis(bool detected);
         private readonly HttpClient _httpClient;
         private readonly string _subscriptionKey;
 
@@ -31,11 +33,19 @@
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadAsStringAsync();
+                string result= await response.Content.ReadAsStringAsync();
+                var data = JsonSerializer.Deserialize<CustomCategoryAnalysisResponse>(result, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+                if(data?.customCategoryAnalysis?.detected == true)
+                {
+                    return categoryName;
+                }
+                return string.Empty;
+      
             }
-
-            var error = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"Request failed with status {response.StatusCode}: {error}");
+            throw new Exception($"Error analyzing custom category: {response.ReasonPhrase} - {await response.Content.ReadAsStringAsync()}");
         }
     }
 }

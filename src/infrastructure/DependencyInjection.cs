@@ -41,14 +41,18 @@ namespace infrastructure
         }
         public static IServiceCollection AddCustomCategorySafety(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<ICustomContentFilterService, CustomContentFilterService>();
-
-            services.AddHttpClient<ICustomContentFilterService, CustomContentFilterService>(client =>
+            services.AddHttpClient<CustomContentFilterService>()
+                .ConfigureHttpClient((serviceProvider, client) =>
+                {                    
+                    client.BaseAddress = new Uri(configuration["ContentSafety:URI"]);
+                });
+            services.AddTransient<ICustomContentFilterService>(sp =>
             {
-                client.BaseAddress = new Uri(configuration["ContentSafety:URI"]);
+                var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();                
+                var httpClient = httpClientFactory.CreateClient(nameof(CustomContentFilterService));
+                return new CustomContentFilterService(httpClient, configuration);
             });
             return services;
-
         }
     }
 }
