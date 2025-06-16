@@ -3,7 +3,7 @@
 This sample demonstrates how to use **Azure Content Safety** to filter LLM interactions in a **Semantic Kernel**-powered application. It shows how to implement a `PromptRenderFilter` to block unsafe inputs or outputs based on:
 
 - ✅ Built-in safety categories: `Sexual`, `Self-Harm`, `Hate`, `Violence`
-- 🔧 Custom safety category support (e.g., brand-sensitive terms, internal policy filters)
+- 🔧 Custom safety category support (e.g., personal-data , internal policy )
 
 > 📌 Technologies Used:  
 > - .NET 8 / C#  
