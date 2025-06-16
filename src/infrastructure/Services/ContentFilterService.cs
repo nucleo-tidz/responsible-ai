@@ -33,7 +33,7 @@ namespace infrastructure.Services
             }
             return await Task.FromResult(blockedText);
         }
-        public async Task<IEnumerable<string>> Analyze(string text,string customeCategory=null)
+        public async Task<IEnumerable<string>> Analyze(string text)
         {
             var request = new AnalyzeTextOptions(text);
             var blockLists = this.GetBlockList();
@@ -50,13 +50,18 @@ namespace infrastructure.Services
                     return new string[] { analysis.Category.ToString() };
                 }
             }
-            if(!string.IsNullOrEmpty(customeCategory))
-            {
-                return new string[] { await contentFilterService.AnalyzeCustomCategoryAsync(text, customeCategory) }; 
-            }
+           
             if (analysisResult.Value.BlocklistsMatch != null)
             {
                 return analysisResult.Value.BlocklistsMatch.Select(_ => _.BlocklistName);
+            }
+            return Enumerable.Empty<string>();
+        }
+        public async Task<IEnumerable<string>> Analyze(string text, string customCategory)
+        {
+            if (!string.IsNullOrEmpty(customCategory))
+            {
+                return new string[] { await contentFilterService.AnalyzeCustomCategoryAsync(text, customCategory) };
             }
             return Enumerable.Empty<string>();
         }
