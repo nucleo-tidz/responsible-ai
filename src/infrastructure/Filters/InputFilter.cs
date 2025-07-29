@@ -9,7 +9,7 @@ namespace infrastructure.Filters
         {
             await next(context);
             IEnumerable<string> categories = await contentFilterService.Analyze(context.RenderedPrompt, "personal-data");
-            if (categories.Any())
+            if (categories is not null && !categories.Any(x => string.IsNullOrEmpty(x)))
             {
                 throw new KernelException($"{string.Join(",", categories)} content detected. Operation is denied.");
             }
